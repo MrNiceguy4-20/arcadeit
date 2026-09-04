@@ -3,11 +3,11 @@ import SwiftUI
 struct GameDetailView: View {
     @Binding var game: ArcadeGameProfile
     var onSave: (ArcadeGameProfile) -> Void
-    
+
     @EnvironmentObject var logStore: LogStore
     @State private var showPatchManager = false
     @State private var showInputMappingEditor = false
-    
+
     var body: some View {
         Form {
             Section(header: Text("General")) {
@@ -94,7 +94,7 @@ struct GameDetailView: View {
             }
         }
         .padding()
-        .id(game.id)     // Keeps view stable to stop ViewBridge errors
+        .id(game.id)
         .sheet(isPresented: $showPatchManager) {
             PatchManagerView(patches: $game.prelaunchPatches)
                 .environmentObject(logStore)

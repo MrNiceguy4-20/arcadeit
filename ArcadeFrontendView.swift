@@ -5,28 +5,28 @@ struct ArcadeFrontendView: View {
     @ObservedObject var store: GameLibraryStore
     @EnvironmentObject var logStore: LogStore
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var selectedIndex: Int = 0
-    
+
     var body: some View {
         ZStack {
             LinearGradient(colors: [.black, .gray], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 20) {
                 Text("Arcade Mode")
                     .font(.largeTitle.bold())
                     .foregroundColor(.white)
                     .padding(.top, 20)
-                
+
                 Spacer()
-                
+
                 if store.games.isEmpty {
                     Text("No games available")
                         .foregroundColor(.white.opacity(0.7))
                 } else {
                     var game = store.games[selectedIndex]
-                    
+
                     VStack(spacing: 16) {
                         coverImage(for: game)
                             .resizable()
@@ -60,7 +60,7 @@ struct ArcadeFrontendView: View {
                         .padding(.top, 10)
                     }
                 }
-                
+
                 Spacer()
 
                 HStack {
@@ -76,15 +76,15 @@ struct ArcadeFrontendView: View {
                 .padding(.bottom, 30)
             }
         }
-        .transaction { tx in tx.disablesAnimations = true }  // Prevent TextInput teardown
+        .transaction { tx in tx.disablesAnimations = true }
     }
-    
+
     private func moveSelection(_ delta: Int) {
         guard !store.games.isEmpty else { return }
         let count = store.games.count
         selectedIndex = (selectedIndex + delta + count) % count
     }
-    
+
     private func coverImage(for game: ArcadeGameProfile) -> Image {
         if let name = game.coverImageName,
            let img = NSImage(named: name) {

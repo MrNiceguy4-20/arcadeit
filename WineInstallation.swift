@@ -1,7 +1,3 @@
-//
-//  WineDetector.swift
-//  arcadeit
-//
 
 import Foundation
 
@@ -12,7 +8,7 @@ struct WineInstallation: Identifiable {
 }
 
 enum WineDetector {
-    
+
     static func isAppleSilicon() -> Bool {
         var sysinfo = utsname()
         uname(&sysinfo)
@@ -23,13 +19,13 @@ enum WineDetector {
         }
         return identifier.contains("arm64")
     }
-    
+
     static func detectCandidates() -> [WineInstallation] {
         var results: [WineInstallation] = []
         let fm = FileManager.default
-        
+
         let isARM = isAppleSilicon()
-        
+
         let candidates: [(String, String)] = isARM ? [
             ("Homebrew wine64 (ARM)", "/opt/homebrew/bin/wine64"),
             ("Homebrew wine (ARM)", "/opt/homebrew/bin/wine"),
@@ -39,7 +35,7 @@ enum WineDetector {
             ("Homebrew wine (Intel)", "/usr/local/bin/wine"),
             ("CrossOver wine", "/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine")
         ]
-        
+
         for (name, path) in candidates {
             if fm.isExecutableFile(atPath: path) {
                 results.append(WineInstallation(name: name, path: path))

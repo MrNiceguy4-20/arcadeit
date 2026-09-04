@@ -1,7 +1,3 @@
-//
-//  GameSettingsView.swift
-//  arcadeit
-//
 
 import SwiftUI
 
@@ -12,9 +8,6 @@ struct GameSettingsView: View {
     var body: some View {
         Form {
 
-            // ----------------------------------
-            // Game Info
-            // ----------------------------------
             Section(header: Text("Game")) {
                 TextField("Name", text: $game.name)
 
@@ -31,17 +24,11 @@ struct GameSettingsView: View {
                 .frame(height: 80)
             }
 
-            // ----------------------------------
-            // Launch Settings
-            // ----------------------------------
             Section(header: Text("Launch")) {
                 TextField("Executable Path", text: $game.executablePath)
                 TextField("Working Directory", text: $game.workingDirectory)
             }
 
-            // ----------------------------------
-            // Wine (Per-Game)
-            // ----------------------------------
             Section(header: Text("Wine")) {
                 Toggle("Use Per-Game Prefix", isOn: $game.usePerGamePrefix)
 
@@ -59,9 +46,6 @@ struct GameSettingsView: View {
                 Toggle("Silent Wine (WINEDEBUG=-all)", isOn: $game.silentWine)
             }
 
-            // ----------------------------------
-            // Winetricks (Per Game)
-            // ----------------------------------
             Section(header: Text("Winetricks")) {
 
                 let grouped = Dictionary(
@@ -92,9 +76,6 @@ struct GameSettingsView: View {
                 }
             }
 
-            // ----------------------------------
-            // Input Mapping
-            // ----------------------------------
             if let mapping = game.inputMapping {
                 Section(header: Text("Input Mapping")) {
                     Text("Start: \(mapping.startKeyCode)")

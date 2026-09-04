@@ -1,9 +1,5 @@
 import Foundation
 
-// ----------------------------------
-// Input Mapping
-// ----------------------------------
-
 struct InputMapping: Codable, Hashable {
     var buttonAKeyCode: Int
     var buttonBKeyCode: Int
@@ -24,18 +20,10 @@ struct InputMapping: Codable, Hashable {
     }
 }
 
-// ----------------------------------
-// Detected Game
-// ----------------------------------
-
 enum DetectedGameType: String, Codable {
     case contraEvolution
     case unknown
 }
-
-// ----------------------------------
-// Winetricks
-// ----------------------------------
 
 enum WinetricksVerb: String, Codable, CaseIterable, Identifiable, Hashable {
     case corefonts
@@ -71,10 +59,6 @@ enum WinetricksVerb: String, Codable, CaseIterable, Identifiable, Hashable {
     }
 }
 
-// ----------------------------------
-// Game Profile
-// ----------------------------------
-
 struct ArcadeGameProfile: Identifiable, Codable, Hashable {
     let id: UUID
 
@@ -86,33 +70,27 @@ struct ArcadeGameProfile: Identifiable, Codable, Hashable {
 
     var notes: String?
 
-    // Artwork
     var coverImageName: String?
     var coverImageURL: URL?
 
-    // Display / runtime
     var forceFullscreen: Bool
     var forceWindowed: Bool
     var overrideResolution: Bool
     var resolutionWidth: Int
     var resolutionHeight: Int
 
-    // Wine
     var usePerGamePrefix: Bool
     var winePrefixPath: String?
     var disableWineMenuBuilder: Bool
     var silentWine: Bool
     var dllOverrides: [String]
 
-    // Winetricks
     var winetricksVerbs: Set<WinetricksVerb>
-    var winetricksApplied: Bool   // ✅ REQUIRED FIELD
+    var winetricksApplied: Bool
 
-    // Patches / input
     var prelaunchPatches: [PrelaunchPatch]
     var inputMapping: InputMapping?
 
-    // Detection
     var detectedGame: DetectedGameType
 
     init(
@@ -136,7 +114,7 @@ struct ArcadeGameProfile: Identifiable, Codable, Hashable {
         silentWine: Bool = false,
         dllOverrides: [String] = [],
         winetricksVerbs: Set<WinetricksVerb> = [],
-        winetricksApplied: Bool = false,   // ✅ DEFAULT
+        winetricksApplied: Bool = false,
         prelaunchPatches: [PrelaunchPatch] = [],
         inputMapping: InputMapping? = nil,
         detectedGame: DetectedGameType = .unknown

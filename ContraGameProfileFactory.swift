@@ -1,21 +1,15 @@
 import Foundation
 
 struct ContraGameProfileFactory {
-    
-    /// Creates a Contra: Evolution arcade profile.
-    ///
-    /// - Parameter baseFolder: macOS folder where Contra is stored, e.g.:
-    ///   "/Users/kevin/Desktop/Contra"
+
     static func makeContraProfile(baseFolder: String) -> ArcadeGameProfile {
         let workingDir = baseFolder
-        
-        // Convert macOS path to Wine Z: path
-        // /Users/kevin/Desktop/Contra -> Z:\Users\kevin\Desktop\Contra\AMContra.exe
+
         let windowsBase = baseFolder.replacingOccurrences(of: "/", with: "\\")
         let exePath = "Z:" + windowsBase + "\\AMContra.exe"
-        
+
         let configPath = baseFolder + "/data/config.ini"
-        
+
         let windowedPatch = PrelaunchPatch(
             description: "Set Contra fullscreen=0 (force windowed mode)",
             type: .replaceTextInFile,
@@ -23,7 +17,7 @@ struct ContraGameProfileFactory {
             searchText: "fullscreen=1",
             replacementText: "fullscreen=0"
         )
-        
+
         return ArcadeGameProfile(
             name: "Contra: Evolution (Arcade)",
             executablePath: exePath,

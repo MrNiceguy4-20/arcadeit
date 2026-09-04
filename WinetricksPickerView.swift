@@ -1,10 +1,3 @@
-//
-//  WinetricksPickerView.swift
-//  arcadeit
-//
-//  Created by kevin on 2025-12-12.
-//
-
 
 import SwiftUI
 

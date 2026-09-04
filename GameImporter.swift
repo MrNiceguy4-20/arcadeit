@@ -1,7 +1,3 @@
-//
-//  GameImporter.swift
-//  arcadeit
-//
 
 import Foundation
 
@@ -19,9 +15,6 @@ enum GameImporter {
             $0.lastPathComponent.lowercased()
         })
 
-        // --------------------------------------------------
-        // Contra – Evolution detection
-        // --------------------------------------------------
         let isContra =
             names.contains("amcontra.exe") &&
             names.contains("libacio.dll") &&
@@ -59,9 +52,6 @@ enum GameImporter {
             )
         }
 
-        // --------------------------------------------------
-        // Generic fallback
-        // --------------------------------------------------
         let exe = files.first {
             $0.pathExtension.lowercased() == "exe"
         }

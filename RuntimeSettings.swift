@@ -6,7 +6,7 @@ struct RuntimeSettings: Codable {
     var useVirtualDesktop: Bool
     var virtualDesktopWidth: Int
     var virtualDesktopHeight: Int
-    
+
     static var `default`: RuntimeSettings {
         RuntimeSettings(
             wineBinaryPath: "/usr/local/bin/wine",

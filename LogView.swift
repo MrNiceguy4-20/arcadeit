@@ -1,24 +1,16 @@
-//
-//  LogView.swift
-//  arcadeit
-//
 
 import SwiftUI
 
 struct LogView: View {
     @EnvironmentObject var logStore: LogStore
 
-    // UI State
     @State private var searchText = ""
     @State private var showTimestamps = true
     @State private var selectedLevel: LogLevelFilter = .all
 
     var body: some View {
         VStack(spacing: 0) {
-            
-            // ---------------------------------------------------------
-            // HEADER BAR
-            // ---------------------------------------------------------
+
             HStack {
                 Picker("Level", selection: $selectedLevel) {
                     ForEach(LogLevelFilter.allCases, id: \.self) { level in
@@ -43,9 +35,6 @@ struct LogView: View {
             .background(Color(NSColor.windowBackgroundColor))
             .border(Color.gray.opacity(0.25), width: 1)
 
-            // ---------------------------------------------------------
-            // LOG OUTPUT
-            // ---------------------------------------------------------
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 2) {
@@ -73,15 +62,12 @@ struct LogView: View {
                 }
             }
 
-            // ---------------------------------------------------------
-            // FOOTER
-            // ---------------------------------------------------------
             HStack {
                 Toggle("Show timestamps", isOn: $showTimestamps)
                     .toggleStyle(.switch)
-                
+
                 Spacer()
-                
+
                 Text("\(logStore.entries.count) entries")
                     .foregroundColor(.secondary)
                     .font(.caption)
@@ -92,9 +78,6 @@ struct LogView: View {
         .frame(minWidth: 600, minHeight: 350)
     }
 
-    // ---------------------------------------------------------
-    // FILTERED LIST
-    // ---------------------------------------------------------
     var filteredLogs: [LogEntry] {
         logStore.entries.filter { entry in
 
@@ -104,21 +87,17 @@ struct LogView: View {
             case .warn: if !entry.text.contains("[WARN]") { return false }
             case .error: if !entry.text.contains("[ERROR]") { return false }
             }
-            
+
             if !searchText.isEmpty &&
                 !entry.text.localizedCaseInsensitiveContains(searchText)
             {
                 return false
             }
-            
+
             return true
         }
     }
 }
-
-// ---------------------------------------------------------
-// MARK: Log Levels
-// ---------------------------------------------------------
 
 enum LogLevelFilter: String, CaseIterable {
     case all = "All"
@@ -127,14 +106,10 @@ enum LogLevelFilter: String, CaseIterable {
     case error = "Error"
 }
 
-// ---------------------------------------------------------
-// MARK: Log Line Row
-// ---------------------------------------------------------
-
 struct LogLineView: View {
     let entry: LogEntry
     let showTimestamps: Bool
-    
+
     var body: some View {
         HStack(alignment: .top, spacing: 6) {
             if showTimestamps {
@@ -143,14 +118,14 @@ struct LogLineView: View {
                     .font(.system(size: 10, weight: .medium, design: .monospaced))
                     .frame(width: 80, alignment: .leading)
             }
-            
+
             Text(entry.text)
                 .foregroundColor(levelColor(entry.text))
                 .font(.system(size: 12, weight: .regular, design: .monospaced))
                 .textSelection(.enabled)
         }
     }
-    
+
     func levelColor(_ text: String) -> Color {
         if text.contains("[ERROR]") { return .red }
         if text.contains("[WARN]")  { return .orange }

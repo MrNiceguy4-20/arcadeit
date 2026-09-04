@@ -1,15 +1,3 @@
-//
-//  WinetricksInstaller.swift
-//  arcadeit
-//
-//  Created by kevin on 2025-12-12.
-//
-
-
-//
-//  WinetricksInstaller.swift
-//  arcadeit
-//
 
 import Foundation
 
@@ -35,10 +23,6 @@ enum WinetricksInstaller {
 
         return dir.appendingPathComponent("winetricks")
     }()
-
-    // --------------------------------------------------
-    // MARK: - Install / Update
-    // --------------------------------------------------
 
     static func installOrUpdate(
         log: LogStore?,
@@ -72,7 +56,6 @@ enum WinetricksInstaller {
 
                 try fm.copyItem(at: tempURL, to: installPath)
 
-                // Make executable
                 try fm.setAttributes(
                     [.posixPermissions: 0o755],
                     ofItemAtPath: installPath.path
@@ -93,10 +76,6 @@ enum WinetricksInstaller {
 
         task.resume()
     }
-
-    // --------------------------------------------------
-    // MARK: - Run Winetricks
-    // --------------------------------------------------
 
     static func run(
         verb: String,

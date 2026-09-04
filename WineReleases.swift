@@ -1,7 +1,3 @@
-//
-//  WineReleases.swift
-//  arcadeit
-//
 
 import Foundation
 import Combine
@@ -35,18 +31,16 @@ final class WineReleases: ObservableObject {
 
                 let mapped: [WineRelease] = decoded.compactMap { (release) -> WineRelease? in
 
-                    // Select first .tar.xz asset (Gcenx macOS builds)
                     guard let asset = release.assets.first(where: {
                         $0.name.lowercased().hasSuffix(".tar.xz")
                     }) else {
                         return nil
                     }
 
-                    // ✅ MATCH EXISTING WineRelease INITIALIZER
                     return WineRelease(
-                        id: UUID(),                         // FIX #1
+                        id: UUID(),
                         name: release.name ?? release.tag_name,
-                        tag: release.tag_name,              // FIX #2
+                        tag: release.tag_name,
                         assetURL: asset.browser_download_url
                     )
                 }
@@ -63,10 +57,6 @@ final class WineReleases: ObservableObject {
         task.resume()
     }
 }
-
-// ------------------------------------------------------------
-// MARK: - GitHub API Models (PRIVATE)
-// ------------------------------------------------------------
 
 private struct GitHubRelease: Decodable {
     let id: Int

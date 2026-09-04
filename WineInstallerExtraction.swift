@@ -1,12 +1,8 @@
-//
-//  WineInstallerExtraction.swift
-//  arcadeit
-//
 
 import Foundation
 
 enum WineInstallerExtraction {
-    
+
     static func extract(
         archiveURL: URL,
         destination: URL,
@@ -14,22 +10,19 @@ enum WineInstallerExtraction {
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         log?.append("[EXTRACT] Attempting tar extraction (content-based)")
-        
-        // Try tar.xz first
+
         extractTar(archiveURL, destination, ["-xJf"], log) { result in
             if case .success = result {
                 completion(.success(()))
                 return
             }
-            
-            // Try tar.gz
+
             extractTar(archiveURL, destination, ["-xzf"], log) { result in
                 if case .success = result {
                     completion(.success(()))
                     return
                 }
-                
-                // Try zip as last fallback
+
                 extractZip(archiveURL, destination, log) { result in
                     if case .success = result {
                         completion(.success(()))
@@ -50,11 +43,6 @@ enum WineInstallerExtraction {
         }
     }
 
-    
-    // ------------------------------------------------------
-    // MARK: - tar extractor
-    // ------------------------------------------------------
-    
     private static func extractTar(
         _ archive: URL,
         _ dest: URL,
@@ -63,18 +51,14 @@ enum WineInstallerExtraction {
         _ completion: @escaping (Result<Void, Error>) -> Void
     ) {
         log?.append("[EXTRACT] Using tar \(flags.joined(separator: " "))")
-        
+
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/tar")
         process.arguments = flags + [archive.path, "-C", dest.path]
-        
+
         pipeAndRun(process, log, completion)
     }
-    
-    // ------------------------------------------------------
-    // MARK: - zip extractor
-    // ------------------------------------------------------
-    
+
     private static func extractZip(
         _ archive: URL,
         _ dest: URL,
@@ -82,18 +66,14 @@ enum WineInstallerExtraction {
         _ completion: @escaping (Result<Void, Error>) -> Void
     ) {
         log?.append("[EXTRACT] Using unzip")
-        
+
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/unzip")
         process.arguments = ["-o", archive.path, "-d", dest.path]
-        
+
         pipeAndRun(process, log, completion)
     }
-    
-    // ------------------------------------------------------
-    // MARK: - common runner
-    // ------------------------------------------------------
-    
+
     private static func pipeAndRun(
         _ process: Process,
         _ log: LogStore?,
@@ -123,7 +103,6 @@ enum WineInstallerExtraction {
             completion(.failure(error))
         }
 
-        // ✅ EXPLICIT PARAMETER TYPE — THIS FIXES THE ERROR
         process.terminationHandler = { (_: Process) in
             let status = process.terminationStatus
             DispatchQueue.main.async {

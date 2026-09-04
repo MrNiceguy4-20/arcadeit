@@ -1,14 +1,9 @@
-//
-//  arcadeitApp.swift
-//  arcadeit
-//
 
 import SwiftUI
 
 @main
 struct arcadeitApp: App {
 
-    // MARK: - Global Stores
     @StateObject private var settingsStore = RuntimeSettingsStore()
     @StateObject private var logStore = LogStore()
     @StateObject private var gameLibraryStore = GameLibraryStore()

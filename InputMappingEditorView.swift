@@ -1,30 +1,23 @@
-//
-//  InputMappingEditorView.swift
-//  arcadeit
-//
-//  Created by kevin on 2025-12-11.
-//
-
 
 import SwiftUI
 
 struct InputMappingEditorView: View {
     @Environment(\.dismiss) private var dismiss
-    
+
     @State var mapping: InputMapping
-    
+
     var onCommit: ((InputMapping) -> Void)?
-    
+
     init(mapping: Binding<InputMapping>, onCommit: ((InputMapping) -> Void)? = nil) {
         _mapping = State(initialValue: mapping.wrappedValue)
         self.onCommit = onCommit
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Input Mapping (macOS keycodes, US layout)")
                 .font(.headline)
-            
+
             Form {
                 HStack {
                     Text("Button A (shoot)")
@@ -57,7 +50,7 @@ struct InputMappingEditorView: View {
                         .frame(width: 60)
                 }
             }
-            
+
             HStack {
                 Spacer()
                 Button("Cancel") {

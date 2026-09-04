@@ -1,7 +1,3 @@
-//
-//  GameLibraryStore.swift
-//  arcadeit
-//
 
 import Foundation
 import Combine

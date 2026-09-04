@@ -1,19 +1,12 @@
-//
-//  PatchManagerView.swift
-//  arcadeit
-//
-//  Created by kevin on 2025-12-11.
-//
-
 
 import SwiftUI
 
 struct PatchManagerView: View {
     @Binding var patches: [PrelaunchPatch]
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var selectedPatchID: PrelaunchPatch.ID?
-    
+
     var body: some View {
         HStack {
             List(selection: $selectedPatchID) {
@@ -26,7 +19,7 @@ struct PatchManagerView: View {
                 }
             }
             .frame(minWidth: 180)
-            
+
             if let id = selectedPatchID,
                let idx = patches.firstIndex(where: { $0.id == id }) {
                 PatchDetailEditorView(patch: $patches[idx])
@@ -52,7 +45,7 @@ struct PatchManagerView: View {
                 } label: {
                     Label("Add Patch", systemImage: "plus")
                 }
-                
+
                 Button("Done") {
                     dismiss()
                 }
@@ -64,17 +57,17 @@ struct PatchManagerView: View {
 
 struct PatchDetailEditorView: View {
     @Binding var patch: PrelaunchPatch
-    
+
     var body: some View {
         Form {
             Section(header: Text("Description")) {
                 TextField("Description", text: $patch.description)
             }
-            
+
             Section(header: Text("Target File")) {
                 TextField("Target path", text: $patch.targetPath)
             }
-            
+
             if patch.type == .replaceTextInFile {
                 Section(header: Text("Text Replace")) {
                     TextField("Search text", text: Binding(

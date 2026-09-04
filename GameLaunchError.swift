@@ -1,7 +1,3 @@
-//
-//  GameLauncher.swift
-//  arcadeit
-//
 
 import Foundation
 
@@ -23,7 +19,6 @@ final class GameLauncher {
 
     func launch(game: inout ArcadeGameProfile) throws {
 
-
         guard let s = settingsStore?.settings else {
             throw GameLaunchError.launchFailed("Runtime settings not configured")
         }
@@ -35,14 +30,8 @@ final class GameLauncher {
             throw GameLaunchError.wineNotFound
         }
 
-        // -----------------------------
-        // Input mapping
-        // -----------------------------
         InputMapper.shared.configure(for: game.inputMapping)
 
-        // -----------------------------
-        // Prefix resolution
-        // -----------------------------
         let winePrefix: String
         if game.usePerGamePrefix {
             winePrefix = PrefixManager.prefixPath(for: game.id)
@@ -51,9 +40,6 @@ final class GameLauncher {
             winePrefix = s.winePrefixPath
         }
 
-        // -----------------------------
-        // Auto-apply Winetricks (ONCE)
-        // -----------------------------
         if game.usePerGamePrefix,
            !game.winetricksApplied,
            !game.winetricksVerbs.isEmpty {
@@ -69,18 +55,11 @@ final class GameLauncher {
                 )
             }
 
-            // Mark as applied (caller must save profile)
             game.winetricksApplied = true
         }
 
-        // -----------------------------
-        // Pre-launch patches
-        // -----------------------------
         applyPrelaunchPatches(for: game)
 
-        // -----------------------------
-        // Build Wine process
-        // -----------------------------
         let process = Process()
         process.launchPath = winePath
 
@@ -107,9 +86,6 @@ final class GameLauncher {
         process.arguments = args
         process.currentDirectoryPath = game.workingDirectory
 
-        // -----------------------------
-        // Environment
-        // -----------------------------
         var env = ProcessInfo.processInfo.environment
         env["WINEPREFIX"] = winePrefix
 
@@ -121,9 +97,6 @@ final class GameLauncher {
             env["WINEDEBUG"] = "-all"
         }
 
-        // -----------------------------
-        // DLL Overrides (CRITICAL)
-        // -----------------------------
         var overrides: [String] = []
 
         if game.disableWineMenuBuilder {
@@ -141,9 +114,6 @@ final class GameLauncher {
 
         process.environment = env
 
-        // -----------------------------
-        // Logging
-        // -----------------------------
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError  = pipe
@@ -165,9 +135,6 @@ final class GameLauncher {
             self?.logStore?.append("[INFO] Game exited with status \(proc.terminationStatus)")
         }
 
-        // -----------------------------
-        // Launch
-        // -----------------------------
         logStore?.append("[INFO] Launching \(game.name)")
         logStore?.append("[INFO] WINEPREFIX=\(winePrefix)")
         logStore?.append("[INFO] \(winePath) \(args.joined(separator: " "))")
@@ -180,9 +147,6 @@ final class GameLauncher {
         }
     }
 
-    // --------------------------------------------------
-    // MARK: - Pre-launch patches
-    // --------------------------------------------------
     private func applyPrelaunchPatches(for game: ArcadeGameProfile) {
         guard !game.prelaunchPatches.isEmpty else { return }
 
